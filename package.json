@@ -1,6 +1,6 @@
 {
     "name": "node-blink1-server",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "HTTP REST API server in Node for blink(1) devices",
     "repository": {
         "type": "git",

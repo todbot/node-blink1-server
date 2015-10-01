@@ -50,6 +50,22 @@ var blink1Fade = function( millis, r, g, b, ledn ){
     return "success";
 };
 
+var blink1Blink = function( onoff, repeats, millis, r, g, b, ledn ) {
+    // console.log("blink1Blink:", onoff, repeats, millis, r, g, b, ledn );
+    if( onoff ) {
+        blink1Fade( millis/2, r, g, b, ledn );
+    } else {
+        blink1Fade( millis/2, 0, 0, 0, ledn );
+        repeats--;
+    }
+    onoff = !onoff;
+    if( repeats ) {
+        setTimeout( function() {
+            blink1Blink(onoff, repeats, millis, r, g, b, ledn);
+        }, millis );
+    }
+};
+
 app.get('/blink1', function(req, res) {
     blink1TryConnect();
     var response = {
@@ -66,21 +82,19 @@ app.get('/blink1', function(req, res) {
 });
 
 app.get('/blink1/fadeToRGB', function(req, res) {
-    var rgb;
+    var color = parsecolor(req.query.rgb);
     var time = Number(req.query.time) || 0.1;
     var ledn = Number(req.query.ledn) || 0;
     var status = "success";
-    if( req.query.rgb ) {
-        var color = parsecolor(req.query.rgb);
-        if( !color.rgb ) {
-            status = "bad hex color specified " + req.query.rgb;
-        } else {
-            rgb = color.rgb;
-            lastColor = color.hex;
-            lastTime = time;
-            lastLedn = ledn;
-            status = blink1Fade( time*1000, rgb[0], rgb[1], rgb[2], ledn );
-        }
+    var rgb = color.rgb;
+    if( rgb ) {
+        lastColor = color.hex;
+        lastTime = time;
+        lastLedn = ledn;
+        status = blink1Fade( time*1000, rgb[0], rgb[1], rgb[2], ledn );
+    }
+    else {
+        status = "bad hex color specified " + req.query.rgb;
     }
     var response = {
         blink1Connected: blink1 !== null,
@@ -90,6 +104,36 @@ app.get('/blink1/fadeToRGB', function(req, res) {
         lastLedn: lastLedn,
         lastRepeats: lastRepeats,
         cmd: "fadeToRGB",
+        status: status
+    };
+    res.json( response );
+});
+
+app.get('/blink1/blink', function(req, res) {
+    var color = parsecolor(req.query.rgb);
+    var time = Number(req.query.time) || 0.1;
+    var ledn = Number(req.query.ledn) || 0;
+    var repeats = Number(req.query.repeats) || Number(req.query.count) || 3;
+    var status = "success";
+    var rgb = color.rgb;
+    if( rgb ) {
+        lastColor = color.hex;
+        lastTime = time;
+        lastLedn = ledn;
+        lastRepeats = repeats;
+        blink1Blink( true, repeats, time*1000, rgb[0], rgb[1], rgb[2], ledn );
+    }
+    else {
+        status = "bad hex color specified " + req.query.rgb;
+    }
+    var response = {
+        blink1Connected: blink1 !== null,
+        blink1Serials: devices,
+        lastColor: lastColor,
+        lastTime: lastTime,
+        lastLedn: lastLedn,
+        lastRepeats: lastRepeats,
+        cmd: "blink1",
         status: status
     };
     res.json( response );

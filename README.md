@@ -23,7 +23,15 @@ npm start 8754
 
 ### Supported URIs:
 - `/blink1`  -- status info about connected blink1s, lastColor, etc.
-- `/blink1/fadeToRGB` -- fade blink(1) to a color
+- `/blink1/fadeToRGB` -- fade blink(1) to a color. query args:
+    - `rgb` -- hex color code (e.g. "#ff00ff") [required]
+    - `time` -- fade time in seconds (default: 0.1)
+    - `ledn` -- LED to control (0=both, 1=top, 2=bottom; default: 0)
+- `/blink1/blink` -- blink a color, query args:
+    - `rgb` -- hex color code (e.g. "`#ff00ff`") [required]
+    - `time` -- fade & blink time in seconds (default: 0.1)
+    - `ledn` -- LED to control (0=both, 1=top, 2=bottom; default: 0)
+    - `repeats` -- number of times to blink (default: 3)
 
 ### Examples:
 ```
