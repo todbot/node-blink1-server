@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * blink1-server
  *
