@@ -66,6 +66,12 @@ var blink1Blink = function( onoff, repeats, millis, r, g, b, ledn ) {
     }
 };
 
+var blink1Pattern = function(time, rgb, position) {
+    blink1TryConnect();
+    blink1.writePatternLine(time * 1000 / 2, rgb[0], rgb[1], rgb[2], position*2);
+    blink1.writePatternLine(time * 1000 / 2, 0, 0, 0, position*2+1);    
+};
+
 app.get('/blink1', function(req, res) {
     blink1TryConnect();
     var response = {
@@ -136,6 +142,36 @@ app.get('/blink1/blink', function(req, res) {
         cmd: "blink1",
         status: status
     };
+    res.json( response );
+});
+
+app.get('/blink1/pattern', function(req, res) {
+    var colors = req.query.rgb.split(',');
+    var time = Number(req.query.time) || 0.1;
+    var repeats = Number(req.query.repeats) || Number(req.query.count) || 3;
+    var status = "success";
+
+    for (var i = 0, len = colors.length; i < len && i < 6; i++) {
+        var rgb = parsecolor(colors[i]).rgb;
+        blink1Pattern(time, rgb, i);
+    }
+
+    blink1.playLoop(0, colors.length > 6 ? 11 : colors.length*2-1, repeats);
+
+    if (colors.length > 6) {
+        status =  "can only display first 6 colors. " + colors.length + " colors specified"
+    }
+
+    var response = {
+        blink1Connected: blink1 !== null,
+        blink1Serials: devices,
+        time: time,
+        colors: colors,
+        repeats: repeats,
+        cmd: "pattern",
+        status: status
+    };
+
     res.json( response );
 });
 
