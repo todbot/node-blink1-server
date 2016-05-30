@@ -185,6 +185,8 @@ app.get('/', function(req, res) {
         " -- status info\n" +
         "<li>   <code> /blink1/fadeToRGB?rgb=%23FF00FF&time=1.5&ledn=2 </code> " +
         "-- fade to a RGB color over time for led\n" +
+       "<li>   <code> /blink1/pattern?rgb=%23ff0000,%23ffffff,%230000ff&time=.2&repeats=8 </code> " +
+        "-- blink a sequence of colors\n" +
         "</ul></p>\n" +
         "When starting server, argument specified is port to run on, e.g.:" +
         "<code> blink1-server 8080 </code>\n" +
