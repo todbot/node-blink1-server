@@ -40,7 +40,7 @@ npm start 8754
 ### Examples:
 ```
 $ blink1-server 8754 &
-$ curl 'http://localhost8754/blink1'
+$ curl 'http://localhost:8754/blink1'
 {
     "blink1Connected": true,
     "blink1Serials": [
@@ -53,7 +53,7 @@ $ curl 'http://localhost8754/blink1'
     "cmd": "info",
     "status": "success"
 }
-$ curl  'http://localhost:8754/blink1/fadeToRGB?rgb=%230000ff&time=2.5&ledn=2'
+$ curl 'http://localhost:8754/blink1/fadeToRGB?rgb=%230000ff&time=2.5&ledn=2'
 {
     "blink1Connected": true,
     "blink1Serials": [
