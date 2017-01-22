@@ -66,6 +66,12 @@ var blink1Blink = function( onoff, repeats, millis, r, g, b, ledn ) {
     }
 };
 
+var blink1Pattern = function(time, rgb, position) {
+    blink1TryConnect();
+    blink1.writePatternLine(time * 1000 / 2, rgb[0], rgb[1], rgb[2], position*2);
+    blink1.writePatternLine(time * 1000 / 2, 0, 0, 0, position*2+1);    
+};
+
 app.get('/blink1', function(req, res) {
     blink1TryConnect();
     var response = {
@@ -139,6 +145,36 @@ app.get('/blink1/blink', function(req, res) {
     res.json( response );
 });
 
+app.get('/blink1/pattern', function(req, res) {
+    var colors = req.query.rgb.split(',');
+    var time = Number(req.query.time) || 0.1;
+    var repeats = Number(req.query.repeats) || Number(req.query.count) || 3;
+    var status = "success";
+
+    for (var i = 0, len = colors.length; i < len && i < 6; i++) {
+        var rgb = parsecolor(colors[i]).rgb;
+        blink1Pattern(time, rgb, i);
+    }
+
+    blink1.playLoop(0, colors.length > 6 ? 11 : colors.length*2-1, repeats);
+
+    if (colors.length > 6) {
+        status =  "can only display first 6 colors. " + colors.length + " colors specified"
+    }
+
+    var response = {
+        blink1Connected: blink1 !== null,
+        blink1Serials: devices,
+        time: time,
+        colors: colors,
+        repeats: repeats,
+        cmd: "pattern",
+        status: status
+    };
+
+    res.json( response );
+});
+
 // respond with "Hello World!" on the homepage
 app.get('/', function(req, res) {
     res.send("<html>" +
@@ -149,6 +185,8 @@ app.get('/', function(req, res) {
         " -- status info\n" +
         "<li>   <code> /blink1/fadeToRGB?rgb=%23FF00FF&time=1.5&ledn=2 </code> " +
         "-- fade to a RGB color over time for led\n" +
+       "<li>   <code> /blink1/pattern?rgb=%23ff0000,%23ffffff,%230000ff&time=.2&repeats=8 </code> " +
+        "-- blink a sequence of colors\n" +
         "</ul></p>\n" +
         "When starting server, argument specified is port to run on, e.g.:" +
         "<code> blink1-server 8080 </code>\n" +
