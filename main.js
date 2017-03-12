@@ -30,11 +30,12 @@ var lastRepeats = 0;
 
 // rescan if we know we have no blink1
 var blink1TryConnect = function() {
-    if( blink1 ) { return; }
+    if( blink1 ) { return false; }
     devices = Blink1.devices();
     if( devices.length ) {
         blink1 = new Blink1();
     }
+    return true;
 };
 
 // Call blink1.fadeToRGB while dealing with disconnect / reconnect of blink1
@@ -67,9 +68,7 @@ var blink1Blink = function( onoff, repeats, millis, r, g, b, ledn ) {
 };
 
 var blink1Pattern = function(time, rgb, position) {
-    blink1TryConnect();
-    blink1.writePatternLine(time * 1000 / 2, rgb[0], rgb[1], rgb[2], position*2);
-    blink1.writePatternLine(time * 1000 / 2, 0, 0, 0, position*2+1);    
+    blink1.writePatternLine(time * 1000, rgb[0], rgb[1], rgb[2], position);
 };
 
 app.get('/blink1', function(req, res) {
@@ -93,6 +92,7 @@ app.get('/blink1/fadeToRGB', function(req, res) {
     var ledn = Number(req.query.ledn) || 0;
     var status = "success";
     var rgb = color.rgb;
+
     if( rgb ) {
         lastColor = color.hex;
         lastTime = time;
@@ -111,6 +111,38 @@ app.get('/blink1/fadeToRGB', function(req, res) {
         lastRepeats: lastRepeats,
         cmd: "fadeToRGB",
         status: status
+    };
+    res.json( response );
+});
+
+app.get('/blink1/off', function(req, res) {
+    lastColor = "#000000";
+    blink1Fade( 100, 0,0,0, 0);
+    var response = {
+        blink1Connected: blink1 !== null,
+        blink1Serials: devices,
+        lastColor: lastColor,
+        lastTime: lastTime,
+        lastLedn: lastLedn,
+        lastRepeats: lastRepeats,
+        cmd: "off",
+        status: "success"
+    };
+    res.json( response );
+});
+
+app.get('/blink1/on', function(req, res) {
+    lastColor = "#FFFFFF";
+    blink1Fade( 100, 255,255,255, 0);
+    var response = {
+        blink1Connected: blink1 !== null,
+        blink1Serials: devices,
+        lastColor: lastColor,
+        lastTime: lastTime,
+        lastLedn: lastLedn,
+        lastRepeats: lastRepeats,
+        cmd: "on",
+        status: "success"
     };
     res.json( response );
 });
@@ -148,18 +180,26 @@ app.get('/blink1/blink', function(req, res) {
 app.get('/blink1/pattern', function(req, res) {
     var colors = req.query.rgb.split(',');
     var time = Number(req.query.time) || 0.1;
-    var repeats = Number(req.query.repeats) || Number(req.query.count) || 3;
+    // var repeats = Number(req.query.repeats) || Number(req.query.count) || 3;
+    var repeats = parseInt( req.query.repeats || req.query.count );
+    repeats = (repeats == NaN ) ? 3 : repeats;
     var status = "success";
 
-    for (var i = 0, len = colors.length; i < len && i < 6; i++) {
-        var rgb = parsecolor(colors[i]).rgb;
-        blink1Pattern(time, rgb, i);
+    blink1TryConnect();
+    if( blink1 ) {
+        for (var i=0, len=colors.length; i < len; i++) {
+            var rgb = parsecolor(colors[i]).rgb;
+            blink1Pattern(time, rgb, i);
+        }
+
+        blink1.playLoop(0, colors.length, repeats);
+
+        if (colors.length > 16) {
+            status =  "can only display first 16 colors. " + colors.length + " colors specified"
+        }
     }
-
-    blink1.playLoop(0, colors.length > 6 ? 11 : colors.length*2-1, repeats);
-
-    if (colors.length > 6) {
-        status =  "can only display first 6 colors. " + colors.length + " colors specified"
+    else {
+        status = "no blink1 connected";
     }
 
     var response = {

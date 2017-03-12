@@ -34,8 +34,10 @@ npm start 8754
     - `repeats` -- number of times to blink (default: 3)
 - `/blink1/pattern` -- blink a pattern of colors, query args:
     - `rgb` -- hex color codes separated by a comma (,) (e.g. "`#ff00ff`") [required]
-    - `time` -- blink time in seconds (default: 0.1)
+    - `time` -- time in seconds between colors (default: 0.1)
     - `repeats` -- number of times to blink pattern (default: 3)
+- `/blink1/on`  -- turn blink(1) on to full-on white (#FFFFFF)
+- `/blink1/off`  -- turn blink(1) off (#000000)
 
 ### Examples:
 ```
