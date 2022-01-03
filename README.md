@@ -3,7 +3,7 @@ HTTP REST API server in Node for blink(1) devices
 
 Supports plug and unplug of blink(1) while server is running.
 
-Uses new `node-hid@0.5.0` so works with Node 4.x.
+Uses new `node-hid@0.5.1` so works with Node 4.x.
 
 ### Installation
 
