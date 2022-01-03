@@ -122,6 +122,7 @@
      var response = {
          blink1Connected: blink1 !== null,
          blink1Serials: devices,
+         currentColor: lastColor,
          lastColor: lastColor,
          lastTime: lastTime,
          lastLedn: lastLedn,
@@ -151,6 +152,7 @@
      var response = {
          blink1Connected: blink1 !== null,
          blink1Serials: devices,
+         currentColor: lastColor,
          lastColor: lastColor,
          lastTime: lastTime,
          lastLedn: lastLedn,
@@ -167,6 +169,7 @@
      var response = {
          blink1Connected: blink1 !== null,
          blink1Serials: devices,
+         currentColor: lastColor,
          lastColor: lastColor,
          lastTime: lastTime,
          lastLedn: lastLedn,
@@ -183,6 +186,7 @@
      var response = {
          blink1Connected: blink1 !== null,
          blink1Serials: devices,
+         currentColor: lastColor,
          lastColor: lastColor,
          lastTime: lastTime,
          lastLedn: lastLedn,
@@ -213,6 +217,7 @@
      var response = {
          blink1Connected: blink1 !== null,
          blink1Serials: devices,
+         currentColor: lastColor,
          lastColor: lastColor,
          lastTime: lastTime,
          lastLedn: lastLedn,
