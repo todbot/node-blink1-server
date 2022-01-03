@@ -86,3 +86,10 @@ $ curl  'http://localhost:8754/blink1/pattern?rgb=%23ff0000,%23ffffff,%230000ff&
     "status": "success"
 }
 ```
+
+
+
+### debugging
+```
+% DEBUG=Blink1Service node main.js
+```

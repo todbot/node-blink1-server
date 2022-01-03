@@ -9,7 +9,8 @@
     "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node main.js"
+        "start": "node main.js",
+        "debug": "DEBUG=* node main.js"
     },
     "bin": {
         "blink1-server": "./main.js"
@@ -26,7 +27,9 @@
     "dependencies": {
         "express": "^4.17.2",
         "node-blink1": "^0.5.1",
-        "node-hid": "^2.1.1",
         "parse-color": "^1.0.0"
+    },
+    "devDependencies": {
+        "debug": "^4.3.3"
     }
 }
