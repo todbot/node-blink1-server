@@ -37,6 +37,12 @@ npm start 8754
     - `time` -- time in seconds between colors (default: 0.1)
     - `repeats` -- number of times to blink pattern (default: 3)
 - `/blink1/on`  -- turn blink(1) on to full-on white (#FFFFFF)
+- `/blink1/red`  -- turn blink(1) red (#FF0000)
+- `/blink1/green`  -- turn blink(1) green (#00FF00)
+- `/blink1/blue`  -- turn blink(1) blue (#000000)
+- `/blink1/yellow`  -- turn blink(1) yellow (#FFFF00)
+- `/blink1/cyan`  -- turn blink(1) cyan (#00FFFF)
+- `/blink1/magenta`  -- turn blink(1) magenta (#FF00FF)
 - `/blink1/off`  -- turn blink(1) off (#000000)
 
 ### Examples:
