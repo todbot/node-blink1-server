@@ -5,6 +5,8 @@ Supports plug and unplug of blink(1) while server is running.
 
 Uses new `node-hid@0.5.1` so works with Node 4.x.
 
+[THIS REPO IS ARCHIVED. NEW VERSION: https://www.npmjs.com/package/node-blink1-server]
+
 ### Installation
 
 Install globally and use on the commandline:
